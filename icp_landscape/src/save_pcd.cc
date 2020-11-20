@@ -6,9 +6,9 @@ public:
   SavePCD(ros::NodeHandle& nh) : nhPrivate(nh)
   {
     splitSourceSubscriber = nhPrivate.subscribe<sensor_msgs::PointCloud2>(
-        "/velodyne_points", 10, &SavePCD::sourceCloudCb, this);
+        "/velodyne_points2", 10, &SavePCD::sourceCloudCb, this);
     splitTargetSubscirber = nhPrivate.subscribe<sensor_msgs::PointCloud2>(
-        "/velodyne_points2", 10, &SavePCD::targetCloudCb, this);
+        "/velodyne_points", 10, &SavePCD::targetCloudCb, this);
     overlapPublisher = nhPrivate.advertise<sensor_msgs::PointCloud2>(
         "/filtered_overlap", 10);
     sourceFinalPublisher = nhPrivate.advertise<sensor_msgs::PointCloud2>("/tranformed_source", 10);
@@ -58,8 +58,8 @@ private:
 
     voxelGrid(sourcePCL,sourceVoxel);
     overlapSection(sourcePCL, sourceOverlap);
-    splitPCDLeft(sourceVoxel);
-    splitPCDLeft(sourcePCL);
+    splitPCDRight(sourceVoxel);
+    splitPCDRight(sourcePCL);
     pcl::toROSMsg(*sourcePCL, rawSourceMsg);
     sourceRawPublisher.publish(rawSourceMsg);
     checkSource = true;
@@ -73,8 +73,8 @@ private:
     checkPCD(msg, targetPCL);
     voxelGrid(targetPCL, targetVoxel);
     overlapSection(targetPCL, targetOverlap);
-    splitPCDRight(targetVoxel);
-    splitPCDRight(targetPCL);
+    splitPCDLeft(targetVoxel);
+    splitPCDLeft(targetPCL);
     pcl::toROSMsg(*targetPCL, rawTargetMsg);
     targetRawPublisher.publish(rawTargetMsg);
     checkTarget = true;
@@ -155,15 +155,15 @@ private:
       pcl::IterativeClosestPoint<pcl::PointXYZ, pcl::PointXYZ> icp;
 
       std::cout << sourcePCL->size() << " " << sourceVoxel->size() << std::endl;
-      icp.setInputSource(targetOverlap);
-      icp.setInputTarget(sourceOverlap);
+      icp.setInputSource(sourceOverlap);
+      icp.setInputTarget(targetOverlap);
 
       icp.align(finalCloud);
       std::cout << icp.hasConverged() << " score: " << icp.getFitnessScore()
                 << "\n\n"
                 << icp.getFinalTransformation() << std::endl;
 
-      pcl::transformPointCloud(*targetVoxel, *targetVoxel, icp.getFinalTransformation());
+      pcl::transformPointCloud(*sourceVoxel, *sourceVoxel, icp.getFinalTransformation());
 
       sensor_msgs::PointCloud2 overlapCloudMsg;
       sensor_msgs::PointCloud2 sourceFinalMsg;
@@ -179,7 +179,6 @@ private:
 
       checkSource = false;
       checkTarget = false;
-      ROS_INFO("Publish Success");
     }
   }
 
