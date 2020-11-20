@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<package>
+  <name>excavator_core</name>
+  <version>1.0.0</version>
+ 
+  <description>
+    Doosan Infracore X-Center Excavator Mian Control Node
+    Working on TX2
+  </description>
+
+  <license>BSD</license>
+  <author email="cspark@clobot.co.kr">Daniel Park</author>
+  <maintainer email="ijpark@clobot.co.kr">Tony Park</maintainer>
+  
+  <buildtool_depend>catkin</buildtool_depend>
+  
+  <build_depend>rospy</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>diagnostic_msgs</build_depend>
+  <build_depend>ros_test</build_depend>
+    
+  <run_depend>rospy</run_depend>
+  <run_depend>std_msgs</run_depend>
+  <run_depend>sensor_msgs</run_depend>
+  <run_depend>diagnostic_msgs</run_depend>
+
+  <export>
+  </export>
+</package>

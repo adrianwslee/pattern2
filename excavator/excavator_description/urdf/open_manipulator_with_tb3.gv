@@ -1,0 +1,38 @@
+digraph G {
+node [shape=box];
+"cs_ground" [label="cs_ground"];
+"base_link" [label="base_link"];
+"cs_cor" [label="cs_cor"];
+"cs_boom" [label="cs_boom"];
+"cs_arm" [label="cs_arm"];
+"cs_bucket" [label="cs_bucket"];
+"cs_tip1" [label="cs_tip1"];
+"imu_bucket_link" [label="imu_bucket_link"];
+"imu_boom_link" [label="imu_boom_link"];
+"gnss_left_link" [label="gnss_left_link"];
+"gnss_right_link" [label="gnss_right_link"];
+"imu_body_link" [label="imu_body_link"];
+node [shape=ellipse, color=blue, fontcolor=blue];
+"cs_ground" -> "lower_body_joint" [label="xyz: 0 0 0 \nrpy: 0 -0 0"]
+"lower_body_joint" -> "base_link"
+"base_link" -> "upper_body_joint" [label="xyz: 0 0 1.263 \nrpy: 0 -0 0"]
+"upper_body_joint" -> "cs_cor"
+"cs_cor" -> "boom_joint" [label="xyz: 0.16 -0.06 0.8 \nrpy: 0 1.0207 0"]
+"boom_joint" -> "cs_boom"
+"cs_boom" -> "arm_joint" [label="xyz: 3.398 0 5.541 \nrpy: 3.14159 -0.419693 3.14159"]
+"arm_joint" -> "cs_arm"
+"cs_arm" -> "bucket_joint" [label="xyz: -0.418 0 -3.187 \nrpy: 0 0.5408 0"]
+"bucket_joint" -> "cs_bucket"
+"cs_bucket" -> "bucket_tip_joint" [label="xyz: 0.95 0 -1.15 \nrpy: 0 -0 0"]
+"bucket_tip_joint" -> "cs_tip1"
+"cs_bucket" -> "imu_bucket_joint" [label="xyz: 0.6 0 0.3 \nrpy: 0 -0.45 0"]
+"imu_bucket_joint" -> "imu_bucket_link"
+"cs_boom" -> "imu_boom_joint" [label="xyz: 0.106427 0 2.0167 \nrpy: 0 -0 0"]
+"imu_boom_joint" -> "imu_boom_link"
+"cs_cor" -> "gnss_left_joint" [label="xyz: -1.2 1.25 1 \nrpy: 0 -0 0"]
+"gnss_left_joint" -> "gnss_left_link"
+"cs_cor" -> "gnss_right_joint" [label="xyz: -0.6 -1.25 1 \nrpy: 0 -0 0"]
+"gnss_right_joint" -> "gnss_right_link"
+"cs_cor" -> "imu_body_joint" [label="xyz: 0.48 0 0.37 \nrpy: 0 -0 0"]
+"imu_body_joint" -> "imu_body_link"
+}

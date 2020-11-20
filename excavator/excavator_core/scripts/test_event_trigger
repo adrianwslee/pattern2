@@ -1,0 +1,16 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import rospy
+
+from std_msgs.msg import String
+
+if __name__ == '__main__':
+
+    rospy.init_node('excavator_core_test_event', log_level=rospy.DEBUG)
+
+    try:
+        test_event_trigger = rospy.Publisher('/excavater/event/test_trigger', String, queue_size=1)    
+        test_event_trigger.publish('TEST_TRIGGER')
+    except rospy.ROSInterruptException:
+        pass

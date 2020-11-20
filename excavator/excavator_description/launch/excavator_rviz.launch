@@ -1,0 +1,25 @@
+<launch>
+
+  <rosparam>
+    zeros:
+      upper_body_joint: 0.0
+      boom_joint: 0.0
+      arm_joint: 0.0
+      bucket_joint: 0.0
+  </rosparam>
+
+  <param name="robot_description" textfile="$(find excavator_description)/urdf/excavator.urdf"/>
+
+  <!-- Send joint values -->
+  <node pkg="joint_state_publisher" type="joint_state_publisher" name="joint_state_publisher">
+    <param name="/use_gui" value="true"/>
+  </node>
+
+  <!-- Combine joint values -->
+  <node pkg="robot_state_publisher" type="state_publisher" name="robot_state_publisher"/>
+
+  <!-- Show in Rviz -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find excavator_description)/rviz/excavator.rviz"/>
+  
+</launch>
+

@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>excavator_description</name>
+  <version>1.0.0</version>
+  <description>
+    Doosan Infracore Excavator 3D model description for visualization
+  </description>
+  <license>BSD</license>
+  <author email="cspark@clobot.co.kr">Daniel Park</author>
+  <maintainer email="ijpark@clobot.co.kr">Tony Park</maintainer>
+  
+  <buildtool_depend>catkin</buildtool_depend>
+  <exec_depend>joint_state_publisher</exec_depend>
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>xacro</exec_depend>
+  <exec_depend>urdf</exec_depend>
+</package>

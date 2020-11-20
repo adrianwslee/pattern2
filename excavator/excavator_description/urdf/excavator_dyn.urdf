@@ -1,0 +1,382 @@
+<?xml version="1.0" ?>
+
+<robot name="open_manipulator_with_tb3" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<!-- 
+  Cordinate frame definition
+
+  Z   lower_body_link     cs_ground
+  O   upper_body_link     cs_cor
+  A   boom_link           cs_boom
+  D   arm_link            cs_arm
+  I   bucket_link         cs_bucket
+  T1  bucket_tip_1        cs_tip1
+  T   bucket_tip          cs_tip
+-->
+
+
+
+<!--
+  #######################################
+    Default environment configuration
+  #######################################
+-->
+  <material name="black">
+    <color rgba="0.0 0.0 0.0 1.0"/>
+  </material>
+  <material name="dark">
+    <color rgba="0.3 0.3 0.3 1.0"/>
+  </material>
+  <material name="light_black">
+    <color rgba="0.4 0.4 0.4 1.0"/>
+  </material>
+  <material name="blue">
+    <color rgba="0.0 0.0 0.8 1.0"/>
+  </material>
+  <material name="green">
+    <color rgba="0.0 0.8 0.0 1.0"/>
+  </material>
+  <material name="grey">
+    <color rgba="0.5 0.5 0.5 1.0"/>
+  </material>
+  <material name="orange">
+    <color rgba="1.0 0.423529411765 0.0392156862745 1.0"/>
+  </material>
+  <material name="brown">
+    <color rgba="0.870588235294 0.811764705882 0.764705882353 1.0"/>
+  </material>
+  <material name="red">
+    <color rgba="0.8 0.0 0.0 1.0"/>
+  </material>
+  <material name="white">
+    <color rgba="1.0 1.0 1.0 1.0"/>
+  </material>
+
+  <!-- base_footprint 
+  <link name="base_footprint"/>
+  <joint name="base_joint" type="fixed">
+    <parent link="base_footprint"/>
+    <child link="base_link"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+  </joint>
+  -->
+
+  <!-- base_footprint -->
+  <link name="cs_ground"/>
+
+
+  <!--
+  #######################################
+    EXCAVATOR MAIN LINKS
+  #######################################
+  -->
+  <joint name="lower_body_joint" type="fixed">
+    <parent link="cs_ground"/>
+    <child link="base_link"/>
+    <origin rpy="0 0 0" xyz="0 0 0.0"/>
+  </joint>
+  <!-- cs_ground -->
+  <link name="base_link">
+    <visual>
+      <origin rpy="0 0 0" xyz="-2.54 -1.672 0.0"/> <!-- -2.594 -1.672-->
+      <geometry>
+        <mesh filename="package://excavator_description/meshes/lowerbody.stl" scale="1 1 1"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="-2.5 -1.75 0.0"/>
+      <geometry>
+        <box size="0.01 0.01 0.01"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+    </inertial>
+  </link>
+
+  <joint name="upper_body_joint" type="revolute">
+    <parent link="base_link"/>
+    <child link="cs_cor"/>
+    <origin rpy="0 0 0" xyz="0.0 0.0 1.059"/> <!-- z 1.263-->
+    <limit effort="1000" lower="-2.82743338823" upper="2.82743338823" velocity="0.4"/>
+    <axis xyz="0 0 -1"/>
+  </joint>
+  <!-- upper_body_link / cs_cor -->
+  <link name="cs_cor">
+    <visual>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/> <!-- -3.53 -1.5-->
+      <geometry>
+        <mesh filename="package://excavator_description/meshes/upperbody.stl" scale="1 1 1"/>
+      </geometry>
+      <material name="orange"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.01 0.01 0.01"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+    </inertial>
+  </link>
+
+  <joint name="boom_joint" type="revolute">
+    <parent link="cs_cor"/>
+    <child link="cs_boom"/>
+    <origin rpy="0 1.066 0" xyz="0.12 -0.075 0.75595"/>
+    <limit effort="1000" lower="-0.807995" upper="1.076726" velocity="0.6"/>
+    <axis xyz="0 -1 0"/>
+  </joint>
+  <!-- boom_link / cs_boom-->
+  <link name="cs_boom">
+    <visual>
+      <origin rpy="0 0.0 0" xyz="-0.12 0.075 -0.75595"/>
+      <geometry>
+        <mesh filename="package://excavator_description/meshes/boom.stl" scale="1 1 1"/>
+      </geometry>
+      <material name="orange"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0.0 0" xyz="-0.160 0.0 -0.886"/>
+      <geometry>
+        <mesh filename="package://excavator_description/meshes/boom.stl" scale="1 1 1"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+    </inertial>
+  </link>
+
+<joint name="arm_joint" type="revolute">
+    <parent link="cs_boom"/>
+    <child link="cs_arm"/>
+    <origin rpy="0 -2.707 0" xyz="2.862471 0.0 5.164"/>  <!--2.78-->
+    <axis xyz="0 -1 0"/>
+    <limit effort="1000" lower="-2.715732" upper="-0.621337" velocity="0.6"/>
+  </joint>
+  <!-- arm_link / cs_arm -->
+  <link name="cs_arm">
+    <visual>
+      <origin rpy="0 0 0" xyz="-2.947471 0.075 -5.914"/>
+      <geometry>
+        <mesh filename="package://excavator_description/meshes/arm.stl" scale="1 1 1"/>
+      </geometry>
+      <material name="orange"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="-2.852471 0.0 -5.427084"/>
+      <geometry>
+        <box size="0.01 0.01 0.01"/>
+        <mesh filename="package://excavator_description/meshes/arm.stl" scale="1 1 1"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+    </inertial>
+  </link>
+
+
+
+
+  <joint name="bucket_joint" type="revolute">
+    <parent link="cs_arm"/>
+    <child link="cs_bucket"/>
+    <origin rpy="0 0.4398 0" xyz="-0.177017 0.0 -3.005408"/>
+    <axis xyz="0 -1 0"/>
+    <limit effort="1000" lower="-2.551671" upper="0.561996" velocity="0.6"/>
+  </joint>
+  <!-- bucket_link / cs_bucket -->
+  <link name="cs_bucket">
+    <visual>
+      <origin rpy="0 -0.63 0" xyz="0.0 0.0 0.05"/> <!---.4398-->
+      <geometry>
+        <mesh filename="package://excavator_description/meshes/bucket.stl" scale="1 1 1"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 3.14" xyz="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://excavator_description/meshes/bucket.stl" scale="1 1 1"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+    </inertial>
+  </link>
+
+
+
+  <joint name="bucket_tip_joint" type="fixed">
+    <parent link="cs_bucket"/>
+    <child link="cs_tip1"/>
+    <origin rpy="0 0 0" xyz="0.59065 0 -1.3019"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <link name="cs_tip1">
+    
+  </link>
+
+
+
+
+<!-- 
+  #######################################
+    Sensors
+  #######################################
+-->
+<!-- VELODYNE  cs_ground rpy="1.57 0 -0.209" xyz="1.422 0.678 2.032"
+cs_boom rpy=1.5708 -0.8 0" xyz="2.00339 0 3.86568"
+-->
+<!--
+  <joint name="velodyne_joint" type="fixed">
+    <parent link="cs_boom"/>
+    <child link="velodyne_link"/>
+    <origin rpy="1.5708 -0.815 0" xyz="1.7 0 3.491"/>
+    <limit effort="1000" lower="-1.5" upper="1.0" velocity="1.0"/>
+  </joint>
+  <link name="velodyne_link">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.1 0.15"/>
+      </geometry>
+      <material name="green"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.01 0.01 0.01"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+    </inertial>
+  </link> -->
+  <joint name="velodyne_joint" type="fixed">
+    <parent link="cs_ground"/>
+    <child link="velodyne"/>
+    <origin rpy="0 0 -1.5707" xyz="0.0 0.0 1.02"/>
+    <limit effort="1000" lower="-1.5" upper="1.0" velocity="1.0"/>
+  </joint>
+  <link name="velodyne">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.1 0.15"/>
+      </geometry>
+      <material name="green"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.01 0.01 0.01"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+    </inertial>
+  </link>
+  
+  <joint name="rslidar_joint" type="fixed">
+    <parent link="cs_ground"/>
+    <child link="rslidar"/>
+    <origin rpy="0 0 0" xyz="0.0 0.0 1.02"/>
+    <limit effort="1000" lower="-1.5" upper="1.0" velocity="1.0"/>
+  </joint>
+  <link name="rslidar">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.1 0.15"/>
+      </geometry>
+      <material name="green"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.01 0.01 0.01"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+    </inertial>
+  </link>
+
+  <joint name="lms_joint_1" type="fixed">
+    <parent link="cs_cor"/> <!--cs_cor-->
+    <child link="lms_link_1"/>
+    <origin rpy="-1.5708 0 0" xyz="1.191 0.962 2.367"/> <!--2.367 -> 2.167-->
+    <axis xyz="0 -1 0"/> <!-- I dont know exactly but you can change the value-->
+    <limit effort="1000" lower="-1.57" upper="1.57" velocity="1.0"/>
+  </joint>
+  <link name="lms_link_1">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.1 0.15"/>
+      </geometry>
+      <material name="green"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.01 0.01 0.01"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+    </inertial>
+  </link>
+
+  <joint name="lms_joint_2" type="fixed">
+    <parent link="cs_cor"/>
+    <child link="lms_link_2"/>
+    <origin rpy="-1.5708 0 0" xyz="-0.317 -0.714 2.1503"/>
+    <axis xyz="0 -1 0"/> <!-- I dont know exactly but you can change the value-->
+    <limit effort="1000" lower="-1.57" upper="1.57" velocity="1.0"/>
+  </joint>
+  <link name="lms_link_2">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.1 0.15"/>
+      </geometry>
+      <material name="green"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.01 0.01 0.01"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+    </inertial>
+  </link>
+
+
+</robot>

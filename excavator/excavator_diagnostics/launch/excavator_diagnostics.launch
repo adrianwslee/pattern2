@@ -1,0 +1,6 @@
+<launch>
+
+  <node pkg="excavator_diagnostics" type="excavator_diagnostics" name="excavator_diagnostics" output="screen"/>
+
+</launch>
+

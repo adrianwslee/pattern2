@@ -1,0 +1,20 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import rospy
+
+from connections.connection_manager import ConnectionManager
+
+if __name__ == '__main__':
+
+    rospy.init_node('excavator_core', log_level=rospy.DEBUG)
+
+    try:
+        rospy.logdebug('[excavator_core] node start!')
+        connection_manager = ConnectionManager()
+        
+        rospy.logdebug('[excavator_core] spin loop started..')
+        rospy.spin()
+        
+    except rospy.ROSInterruptException:
+        pass

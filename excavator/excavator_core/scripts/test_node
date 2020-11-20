@@ -1,0 +1,20 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import rospy
+from session.joint_setup import JointSetup
+from session.odom_setup import OdomSetup
+from session.instruction_handler import InstructionHandler
+
+if __name__ == '__main__':
+
+    rospy.init_node('test_node', log_level=rospy.DEBUG)
+
+    try:
+        test = JointSetup()
+        test2 = OdomSetup()
+        test_instruction = InstructionHandler()
+        
+        rospy.spin()
+    except rospy.ROSInterruptException:
+        pass
