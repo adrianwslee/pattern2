@@ -1,0 +1,7 @@
+<launch>
+  <!-- Set volume calculation -->
+  <node pkg="grid_interpolation" type="bucket_node" name="bucket_volume">
+    <param name="bucket_volume" value="true"/>
+    <param name="empty_bucket" value="false"/>
+  </node>
+</launch>
